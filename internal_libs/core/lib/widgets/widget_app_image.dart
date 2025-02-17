@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:octo_image/octo_image.dart';
@@ -88,13 +87,10 @@ class WidgetAppImage extends StatelessWidget {
   Widget _buildImage(String correctImage) {
     ImageProvider provider = (assetImage
         ? AssetImage(imageUrl!)
-        : CachedNetworkImageProvider(
-            correctImage,
+        : CachedNetworkImageProvider(correctImage,
             headers: headers,
             maxHeight: maxHeightCache,
-            maxWidth: maxWidthCache,
-            imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
-          )) as ImageProvider;
+            maxWidth: maxWidthCache)) as ImageProvider;
     return OctoImage(
       color: color,
       image: provider,

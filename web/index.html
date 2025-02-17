@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -11,81 +10,29 @@
 
     For more details:
     * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
   -->
-  <base href="/">
+  <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Ads Speed dashboard">
+  <meta name="description" content="A new Flutter project.">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Ads Speed dashboard">
+  <meta name="apple-mobile-web-app-title" content="bloc_template_flutter">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-  <title>Ads Speed dashboard</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>bloc_template_flutter</title>
   <link rel="manifest" href="manifest.json">
-
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
-
-  <!-- Add this line -->
-  <script>window.flutterfire_web_sdk_version = '10.11.1';</script>
-
 </head>
-
 <body>
-  <script>
-
-    function sendMessageToExtension(extensionId, message, callback) {
-      try {
-        chrome.runtime.sendMessage(extensionId, message, (response) => {
-          if (callback) {
-            callback(response);
-          }
-        });
-      } catch (error) {
-        console.error("Lỗi khi gửi tin nhắn đến extension:", error);
-        if (callback) {
-          callback({error: error.message}); 
-        }
-      }
-    }
-
-    window.addEventListener('load', function (ev) {
-      // navigator.serviceWorker.register('./src/firebase-messaging-sw.js');
-      // Download main.dart.js
-      // window.location.origin 
-      _flutter.loader.loadEntrypoint({
-        entrypointUrl: window.location.origin + "/main.dart.js?v=" + serviceWorkerVersion,
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-          serviceWorkerUrl: "/flutter_service_worker.js?v=",
-          timeoutMillis: 15000
-        },
-      }).then(function (engineInitializer) {
-        return engineInitializer.initializeEngine({
-          useColorEmoji: true,
-        });
-      }).then(function (appRunner) {
-        return appRunner.runApp();
-      });
-    });
-  </script>
-
-  <!-- flutter_image_compress -->
-  <script src="https://cdn.jsdelivr.net/npm/pica@9.0.1/dist/pica.min.js"></script>
-
-  <!-- pdf -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.2.146/pdf.min.js"></script>
-  <script type="text/javascript">
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.2.146/pdf.worker.min.js";
-  </script>
+  <script src="flutter_bootstrap.js" async></script>
 </body>
-
 </html>

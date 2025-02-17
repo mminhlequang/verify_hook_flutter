@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import '../setup/index.dart';
 
 class WidgetRippleButton extends StatelessWidget {
@@ -11,7 +11,6 @@ class WidgetRippleButton extends StatelessWidget {
     this.child,
     this.shadowColor,
     this.enable = true,
-    this.hoverColor,
   });
 
   final bool enable;
@@ -21,19 +20,17 @@ class WidgetRippleButton extends StatelessWidget {
   final BorderRadius borderRadius;
   final VoidCallback? onTap;
   final Widget? child;
-  final Color? hoverColor;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       elevation: elevation,
-      shadowColor: shadowColor ?? appColorText.withOpacity(.1),
+      shadowColor: shadowColor ?? appColorText?.withOpacity(.1),
       color: color ?? hexColor('#F0F1F6'),
       shape: RoundedRectangleBorder(borderRadius: borderRadius),
       clipBehavior: Clip.none,
       child: InkWell(
         borderRadius: borderRadius,
-        hoverColor: hoverColor,
         onTap: enable && onTap != null
             ? () {
                 appHaptic();
@@ -41,7 +38,6 @@ class WidgetRippleButton extends StatelessWidget {
               }
             : null,
         child: child,
-
       ),
     );
   }

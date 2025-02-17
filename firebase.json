@@ -1,4 +1,16 @@
 {
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "verifyhook",
+          "configurations": {
+            "web": "1:824683935034:web:6f98775a53b0e0cf83cc03"
+          }
+        }
+      }
+    }
+  },
   "hosting": {
     "public": "build/web",
     "ignore": [

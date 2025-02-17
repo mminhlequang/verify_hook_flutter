@@ -1,9 +1,10 @@
 import 'dart:math';
 
-import 'package:app/src/constants/constants.dart';
 import 'package:internal_core/internal_core.dart';
+import 'package:internal_core/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 import 'package:gap/gap.dart';
 
 class WidgetDeleteButton extends StatefulWidget {
@@ -15,117 +16,110 @@ class WidgetDeleteButton extends StatefulWidget {
 }
 
 class _WidgetDeleteButtonState extends State<WidgetDeleteButton> {
+  bool isHover = false;
   @override
   Widget build(BuildContext context) {
-    return WidgetOverlayActions(
-      builder:
-          (child, size, childPosition, pointerPosition, animationValue, hide) {
-        // Tính toán vị trí cho popup
-        final popupPosition = Offset(
-          childPosition.dx - 280.sw / 2 + size.width / 2,
-          childPosition.dy - size.height,
-        );
-
-        return Positioned(
-          left: popupPosition.dx,
-          top: popupPosition.dy,
-          child: Stack(
-            alignment: Alignment.topCenter, // Thay đổi alignment
-            children: [
-              Container(
-                width: 280.sw,
-                margin: const EdgeInsets.only(top: 8), // Thay đổi margin
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      offset: const Offset(0, 6),
-                      blurRadius: 20,
-                      spreadRadius: 0,
-                    )
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Column(
+    return PortalTarget(
+      visible: isHover,
+      anchor: const Aligned(
+          follower: Alignment.bottomCenter,
+          target: Alignment.topCenter,
+          offset: Offset(0, -8)),
+      portalFollower: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  offset: const Offset(0, 6),
+                  blurRadius: 20,
+                  spreadRadius: 0,
+                )
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: Text(
+                      'Are you sure?',
+                      overflow: TextOverflow.ellipsis,
+                      style: w400TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  const Gap(12),
+                  Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          'Are you sure\nThat you want delete it?',
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: w400TextStyle(fontSize: 16),
+                      WidgetRippleButton(
+                        onTap: () {
+                          setState(() {
+                            isHover = !isHover;
+                          });
+                        },
+                        color: appColorElement,
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          width: 80,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Cancel',
+                            style: w400TextStyle(),
+                          ),
                         ),
                       ),
                       const Gap(12),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          WidgetRippleButton(
-                            onTap: () {
-                              hide();
-                            },
-                            color: appColorElement,
-                            borderRadius: BorderRadius.circular(8),
-                            child: Container(
-                              width: 80,
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Cancel',
-                                style: w400TextStyle(),
-                              ),
-                            ),
+                      WidgetRippleButton(
+                        onTap: widget.callback,
+                        color: appColorText,
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          width: 80,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Yes',
+                            style: w400TextStyle(color: appColorBackground),
                           ),
-                          const Gap(12),
-                          WidgetRippleButton(
-                            onTap: () async {
-                              await hide();
-                              widget.callback();
-                            },
-                            color: appColorText,
-                            borderRadius: BorderRadius.circular(8),
-                            child: Container(
-                              width: 80,
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Yes',
-                                style: w400TextStyle(color: appColorBackground),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
+                        ),
+                      ),
                     ],
-                  ),
-                ),
+                  )
+                ],
               ),
-              Transform.rotate(
-                angle: -pi / 4, // Đảo ngược góc xoay
-                child: Container(
-                  height: 16,
-                  width: 16,
-                  color: appColorBackground,
-                ),
-              )
-            ],
+            ),
           ),
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Icon(
-          CupertinoIcons.delete_simple,
-          color: appColorText,
-          size: 16.sw,
-        ),
+          Transform.rotate(
+            angle: pi / 4,
+            child: Container(
+              height: 16,
+              width: 16,
+              color: appColorBackground,
+            ),
+          )
+        ],
       ),
+      child: IconButton(
+          onPressed: () {
+            setState(() {
+              isHover = !isHover;
+            });
+          },
+          iconSize: 20,
+          icon: Icon(
+            CupertinoIcons.delete_simple,
+            color: appColorText,
+          )),
     );
   }
 }

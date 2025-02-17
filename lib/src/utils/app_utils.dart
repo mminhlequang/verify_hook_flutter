@@ -1,19 +1,14 @@
-import 'package:app/src/constants/constants.dart';
-import 'package:elegant_notification/elegant_notification.dart';
 import 'package:internal_core/internal_core.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' as p;
 
 import 'utils.dart';
+// import 'dart:html' as html;
 
-bool isFileHaveExtByPath(String path, {List<String>? exts}) {
-  final ext = p.extension(path);
-  if (exts?.isNotEmpty == true) {
-    return exts!.any((e) => ext.endsWith(e));
-  }
-  return ext.isNotEmpty;
-}
+// setFriendlyRouteName({required String title, required String url}) {
+//   html.document.title = title;
+//   html.window.history.pushState(null, title, url);
+// }
 
 bool appIsBottomSheetOpen = false;
 appOpenBottomSheet(
@@ -41,7 +36,7 @@ appOpenBottomSheet(
 }
 
 bool appIsDialogOpen = false;
-appOpenDialog(Widget child, {bool barrierDismissible = true}) async {
+appDialog(Widget child, {bool barrierDismissible = true}) async {
   appIsDialogOpen = true;
   var r = await showGeneralDialog(
     barrierLabel: "popup",
@@ -69,7 +64,9 @@ hideKeyboard() {
 }
 
 appChangedTheme() {
-  AppPrefs.instance.isDarkTheme = !AppPrefs.instance.isDarkTheme;
+  AppPrefs.instance.themeModel = AppPrefs.instance.isDarkTheme
+      ? AppPrefsBase.themeModeLightKey
+      : AppPrefsBase.themeModeDarkKey;
   WidgetsFlutterBinding.ensureInitialized().performReassemble();
 }
 
@@ -99,119 +96,5 @@ bool isImageByMime(type) {
       return true;
     default:
       return false;
-  }
-}
-
-String get timestampId => "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-appTopRightNotification({
-  BuildContext? context,
-  String? message,
-  AppTopRightNotificationType type = AppTopRightNotificationType.error,
-}) {
-  try {
-    ElegantNotification notification;
-
-    switch (type) {
-      case AppTopRightNotificationType.success:
-        notification = ElegantNotification.success(
-          background: appColorBackground,
-          toastDuration: const Duration(seconds: 3),
-          progressIndicatorBackground: appColorElement,
-          width: 400.sw,
-          title: Text(
-            'Success',
-            style: w500TextStyle(fontSize: 16),
-          ),
-          description: Text(
-            message ?? "Operation successful!",
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: w400TextStyle(),
-          ),
-        );
-        break;
-      case AppTopRightNotificationType.info:
-        notification = ElegantNotification.info(
-          width: 400.sw,
-          background: appColorBackground,
-          toastDuration: const Duration(seconds: 2),
-          progressIndicatorBackground: appColorElement,
-          title: Text(
-            'Information',
-            style: w500TextStyle(fontSize: 16),
-          ),
-          description: Text(
-            message ?? "New information!",
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: w400TextStyle(),
-          ),
-        );
-        break;
-      case AppTopRightNotificationType.error:
-      default:
-        notification = ElegantNotification.error(
-          width: 400.sw,
-          toastDuration: const Duration(seconds: 5),
-          background: appColorBackground,
-          progressIndicatorBackground: appColorElement,
-          title: Text(
-            'Warning',
-            style: w500TextStyle(fontSize: 16),
-          ),
-          description: Text(
-            message ?? "An error occurred!",
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: w400TextStyle(),
-          ),
-        );
-    }
-
-    notification.show(context ?? appContext);
-  } catch (_) {}
-}
-
-enum AppTopRightNotificationType {
-  error,
-  success,
-  info,
-}
-
-AppStatus appStatus(dynamic status) {
-  if (status is int) {
-    switch (status) {
-      case 1:
-        return AppStatus.active;
-      case 2:
-        return AppStatus.disable;
-      case 3:
-        return AppStatus.needPay;
-      case 4:
-        return AppStatus.closed;
-      case 5:
-        return AppStatus.grace;
-      case 6:
-        return AppStatus.restricted;
-      default:
-        return AppStatus.unknown;
-    }
-  }
-
-  switch (status.toString().toLowerCase()) {
-    case 'active':
-      return AppStatus.active;
-    case 'disable':
-      return AppStatus.disable;
-    case 'need pay':
-      return AppStatus.needPay;
-    case 'closed':
-      return AppStatus.closed;
-    case 'grace':
-      return AppStatus.grace;
-    case 'restricted':
-      return AppStatus.restricted;
-    default:
-      return AppStatus.unknown;
   }
 }

@@ -1,4 +1,4 @@
-import 'package:internal_core/setup/app_base.dart';
+import 'package:internal_core/internal_core.dart';
 import 'package:internal_core/setup/app_setup.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,8 +12,18 @@ internalSetup() {
       appColors: AppColors.instance,
       appPrefs: AppPrefs.instance,
       appTextStyleWrap: AppTextStyleWrap(
-        fontWrap: (textStyle) => GoogleFonts.roboto(textStyle: textStyle),
+        fontWrap: (textStyle) => GoogleFonts.poppins(textStyle: textStyle),
       ),
+      // networkOptions: PNetworkOptionsImpl(
+      //   loggingEnable: kDebugMode,
+      //   baseUrl: '',
+      //   baseUrlAsset: '',
+      //   responsePrefixData: '',
+      //   responseIsSuccess: (response) => true,
+      //   errorInterceptor: (e) {
+      //     print(e);
+      //   },
+      // ),
     ),
   );
-}
+} 

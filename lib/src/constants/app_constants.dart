@@ -1,28 +1,30 @@
-const String appName = "Dashboard";
+import 'package:collection/collection.dart';
 
-const String adminEmail = "admin@gmail.com";
-const String adminPassword = "123456";
+const String appName = "TempAppName";
 
 const List<String> countriesAvailable = ['VN', 'BE', 'AU'];
 
-const String roleAdmin = "admin";
-const String roleUser = "user";
-const String roleGuest = "guest";
+enum CryptoNetwork {
+  TRX,
+  BSC,
+  ETH,
+  Unknown;
 
-const List<String> roles = [roleAdmin, roleUser, roleGuest];
+  bool get isSupported {
+    switch (this) {
+      case TRX: 
+        return true;
+      default:
+        return false;
+    }
+  }
 
-List<String> allowedExtensionsImage = [
-  ..._allowedExtensionsImage,
-  ..._allowedExtensionsImage.map((e) => e.toUpperCase()),
-];
+  String get name {
+    return this.toString().split('.').last;
+  }
 
-const List<String> _allowedExtensionsImage = [
-  'jpg',
-  'jpeg',
-  'png',
-  'gif',
-  'bmp',
-  'webp',
-  'ico',
-  'svg'
-];
+  static CryptoNetwork fromString(String network) {
+    return CryptoNetwork.values.firstWhereOrNull((e) => e.name == network) ??
+        CryptoNetwork.Unknown;
+  }
+}

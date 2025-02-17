@@ -17,16 +17,16 @@ class AppColors extends AppColorsBase {
   Color get background => byTheme(Colors.white, kdark: Colors.black);
 
   @override
-  Color get element => byTheme(Colors.grey[200]!, kdark: hexColor('#161618'));
+  Color get element => byTheme(Colors.grey[200]!, kdark: Colors.grey[200]!);
 
   @override
-  Color get primary => byTheme(hexColor('3682C8'));
+  Color get primary => byTheme(hexColor('00BDF9'));
 
   @override
-  Color get shimerHighlightColor => byTheme(hexColor('1E1C58'));
+  Color get shimerHighlightColor => byTheme(hexColor('#1C222C'));
 
   @override
-  Color get shimmerBaseColor => byTheme(hexColor('3682C8'));
+  Color get shimmerBaseColor => byTheme(hexColor('#1C222C'));
 }
 
 byTheme(klight, {kdark}) {

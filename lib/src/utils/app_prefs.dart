@@ -49,9 +49,14 @@ class AppPrefs extends AppPrefsBase {
     ]);
   }
 
-  set isDarkTheme(bool? value) => _boxData.put('isDarkTheme', value);
+  bool get isDarkTheme =>
+      AppPrefs.instance.themeModel == AppPrefsBase.themeModeDarkKey;
 
-  bool get isDarkTheme => _boxData.get('isDarkTheme') ?? false;
+  set themeModel(String? value) =>
+      _boxData.put(AppPrefsBase.themeModeKey, value);
+
+  String? get themeModel =>
+      _boxData.get(AppPrefsBase.themeModeKey) ?? AppPrefsBase.themeModeDarkKey;
 
   @override
   set languageCode(String? value) =>
@@ -64,13 +69,13 @@ class AppPrefs extends AppPrefsBase {
   set dateFormat(String value) => _boxData.put('dateFormat', value);
 
   @override
-  String get dateFormat => _boxData.get('dateFormat') ?? 'dd/MM/yyyy';
+  String get dateFormat => _boxData.get('dateFormat') ?? 'en';
 
   @override
   set timeFormat(String value) => _boxData.put('timeFormat', value);
 
   @override
-  String get timeFormat => _boxData.get('timeFormat') ?? 'HH:mm';
+  String get timeFormat => _boxData.get('timeFormat') ?? 'en';
 
   // Future saveAccountToken(AccountToken token) async {
   //   await Future.wait([

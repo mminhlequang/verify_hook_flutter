@@ -1,29 +1,18 @@
 import 'dart:async';
 
-import 'package:app/src/constants/constants.dart';
-import 'package:app/src/firestore_resources/firestore_resources.dart';
 import 'package:bloc/bloc.dart';
-import 'package:app/src/utils/utils.dart';
-import 'package:flutter/foundation.dart';
-import 'package:go_router/go_router.dart';
+import 'package:equatable/equatable.dart';
+import '../../utils/utils.dart';
 
-part 'auth_state.dart';
 
 enum AuthStateType { none, logged }
 
 AuthCubit get authCubit => findInstance<AuthCubit>();
 
 class AuthCubit extends Cubit<AuthState> {
+  StreamSubscription? _subscription;
+
   AuthCubit() : super(AuthState());
-
-  bool get isLoggedIn => state.stateType == AuthStateType.logged;
-
-  bool get isAdmin => state.user[kdbrole] == roleAdmin;
-  bool get isUser => state.user[kdbrole] == roleUser;
-  bool get isGuest => state.user[kdbrole] == roleGuest;
-
-  String get firebaseId => state.user[kdbfirebaseId];
-
   update(user) async {
     state.user = user;
     emit(state.update());
@@ -33,56 +22,52 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   load({Duration delayRedirect = const Duration(seconds: 1)}) async {
-    //Check admin account if not exist then create
-    if (kDebugMode) {
-      var query = await colAdmins.where(kdbrole, isEqualTo: roleAdmin).get();
-      if (query.docs.isEmpty) {
-        final userCredential =
-            await registerWithEmailAndPassword(adminEmail, adminPassword);
-        var id = userCredential.user!.uid;
-        Map<String, dynamic> data = {
-          kdbfirebaseId: id,
-          kdbrole: roleAdmin,
-          kdbfullname: "Admin",
-          kdbphonenumber: "0979629201",
-          kdbemail: adminEmail,
-          kdbisEnable: true,
-        };
-        await colAdmins.doc(id).set(data);
-      }
-    }
-
     try {
-      final isLoggedIn = await checkUserLoggedIn();
-      if (isLoggedIn) {
-        var query = await colAdmins.doc(currentUser.uid).get();
-        if (query.exists) {
-          state.user = query.data()!;
-          emit(state.update(stateType: AuthStateType.logged));
-          return;
-        }
-      }
+      emit(state.update(stateType: AuthStateType.logged));
     } catch (e) {
-      appTopRightNotification(context: appContext, message: e.toString());
+      emit(state.update(stateType: AuthStateType.none));
     }
-    emit(state.update(stateType: AuthStateType.none));
+    if (state.stateType == AuthStateType.logged) {
+      // state.user = user;
+      // _subscription?.cancel();
+      // _subscription =
+      //     FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      //   add(AuthUpdateUser(user: user));
+      // });
+    }
 
     await Future.delayed(delayRedirect);
     _redirect();
   }
 
   logout() async {
+    _subscription?.cancel();
     try {
       emit(state.update(stateType: AuthStateType.none));
       _redirect();
-    } catch (_) {}
+    } catch (e) {}
   }
 
   _redirect() {
-    if (state.stateType != AuthStateType.logged) {
-      appContext.pushReplacement('/login');
-    } else {
-      appContext.pushReplacement('/home');
-    }
+    if (state.stateType == AuthStateType.logged) {
+      // Get.offAllNamed(Routes.nav);
+    } else {}
+  }
+}
+
+class AuthState {
+  AuthStateType stateType;
+  dynamic user;
+
+  AuthState({
+    this.stateType = AuthStateType.none,
+    this.user,
+  });
+
+  AuthState update({AuthStateType? stateType, dynamic user}) {
+    return AuthState(
+      stateType: stateType ?? this.stateType,
+      user: user ?? this.user,
+    );
   }
 }

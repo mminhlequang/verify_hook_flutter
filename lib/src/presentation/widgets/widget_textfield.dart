@@ -16,7 +16,6 @@ class WidgetTextField extends StatefulWidget {
   final Widget? sufixIconWidget;
   final dynamic formatters;
   final int? maxLines;
-  final TextInputType? keyboardType;
 
   final Widget? prefixW;
 
@@ -40,7 +39,6 @@ class WidgetTextField extends StatefulWidget {
     this.isPassword = false,
     this.sufixIconWidget,
     this.maxLines,
-    this.keyboardType,
   });
 
   @override
@@ -126,8 +124,7 @@ class _WidgetTextFieldState extends State<WidgetTextField> {
                               .copyWith(overflow: TextOverflow.ellipsis),
                         )
                       : TextField(
-                          keyboardType: widget.keyboardType,
-                          maxLines: isHideText ? 1 : widget.maxLines,
+                          maxLines: widget.maxLines,
                           inputFormatters: widget.formatters,
                           autofocus: widget.autoFocus,
                           focusNode: _focusNode,
@@ -153,19 +150,6 @@ class _WidgetTextFieldState extends State<WidgetTextField> {
                   Padding(
                     padding: const EdgeInsets.only(right: 12),
                     child: widget.sufixIconWidget,
-                  )
-                else if (widget.isPassword)
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isHideText = !isHideText;
-                      });
-                    },
-                    child: Icon(
-                      isHideText ? Icons.visibility_off : Icons.visibility,
-                      size: 20,
-                      color: hexColor('#68686A'),
-                    ),
                   ),
               ],
             ),
